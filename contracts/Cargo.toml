@@ -1,0 +1,11 @@
+[package]
+name = "omniagent_hub"
+version = "0.1.0"
+edition = "2018"
+
+[dependencies]
+near-sdk = "4.0.0-pre.4"
+borsh = "0.9.2"
+
+[lib]
+crate-type = ["cdylib", "lib"] 
