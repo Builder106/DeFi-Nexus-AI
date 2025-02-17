@@ -1,39 +1,66 @@
-# OmniAgent Hub
+# DecentraTrader
 
-OmniAgent Hub is a decentralized multi-agent platform built on NEAR Protocol that empowers developers to create and deploy autonomous agents across multiple domains including DeFi, social media, absurd experiments, and more.
+DecentraTrader is a decentralized trading agent built for the One Trillion Agents Hackathon (DeFi Agents track). The project integrates with NEAR Protocol and demonstrates a fully decentralized autonomous agent for portfolio management and market making.
 
-## Overview
+## Features:
+- NEAR Smart Contract (Rust) for managing user funds and executing trade orders.
+- Off-chain AI-driven trading agent (Python) that analyzes market data and performs automated trade decisions.
+- Simulated market making and trade execution.
+- Open source under the MIT License.
 
-Built on NEAR Testnet/Mainnet, the system consists of:
+## Architecture:
+- **Contract:** Built with Rust using NEAR SDK. The contract allows depositing funds and executing simulated trade orders.
+- **Trading Agent:** A Python bot that interacts with the contract via NEAR CLI to deposit funds and execute trades based on simple algorithmic decisions.
 
-- **Smart Contracts:** Written in Rust using near-sdk for secure on-chain logic.
-- **Frontend:** A React (TypeScript) based web application.
-- **Modular Agent Architecture:** Modules include DeFi Agents, Social Media Agents, Absurd Agents, Aurora Chain Integration, HOT Wallet integration, Bitte Chain Abstraction, Bitcoin Agents, cross-chain trading and liquidity management.
+## Getting Started:
+1. Deploy the smart contract on NEAR Testnet.
+2. Set up environment variables:
+   - `NEAR_ACCOUNT`: Your NEAR account id.
+   - `CONTRACT_ID`: Your deployed contract id (default is decentratrader.testnet).
+3. Run the Python trading agent:
 
-## Modules and Features
+   ```bash
+   python agent/trader_bot.py
+   ```
 
-- **DeFi Agents:** Market making, yield optimization, portfolio management, AI trading, and DCA strategies.
-- **Social Media Agents:** Twitter/X bot interfaces and meme agents for decentralized interactions.
-- **Absurd Agents:** Creative and experimental agents for outlandish interactions.
-- **Aurora Integration:** Dedicated governance chain deployment via Aurora Cloud Console.
-- **HOT Wallet Module:** Integration with the HOT Omni SDK for cross-network token transfers.
-- **Bitte Integration:** Chain abstraction-based agents compatible with both EVM and NEAR apps.
-- **Bitcoin Agents:** Utilize NEAR chain signatures to manage Bitcoin transactions.
-- **Cross-chain Trading & Liquidity Management:** Agents for autonomous management using NEAR intents and VeaxFlow API.
+## Demonstration:
+A demonstration video showcasing the project in action is available [here](https://www.youtube.com/link-to-demo).
 
-## Development Roadmap
+## License:
+This project is licensed under the MIT License.
 
-1. **Core Architecture & API:** Establish smart contracts and a web frontend.
-2. **Module Development:** Build and integrate each specialized agent module.
-3. **Third-Party Integrations:** Integrate Aurora, HOT SDK, Bitte, Twitter API and more.
-4. **Testing & Deployment:** Deploy on NEAR Testnet/Mainnet, demo preparation, and full documentation.
+## Additional Bounty Agents
 
-## Getting Started
+This project now includes several additional agents that address various sponsored bounties. Each of these agents can be found in the `agent/` directory and can be run individually. Below is an overview:
 
-- Clone the repository.
-- Follow the instructions in the `contracts/` and `frontend/` directories to build and deploy the smart contracts and web app.
-- Test using NEAR CLI and run the frontend locally for a demo.
+- **Aurora Agent (`agent/aurora_agent.py`):** Simulates deploying a dedicated blockchain on Aurora Cloud Console with various governance styles. Make sure to add the comment "1T Agents Hackathon" in Aurora Cloud Console's Additional Information when deploying.
 
-## License
+- **HOT Wallet Agent (`agent/hot_wallet_agent.py`):** Demonstrates HOT Omni token functionality by simulating deposits and withdrawals using the HOT SDK or by interacting with a HOT Omni smart contract.
 
-This project is open source under the MIT License.
+- **Bitte Agent (`agent/bitte_agent.py`):** Implements chain abstraction functionality by simulating a token swap (e.g., swapping USDC for VIRTUAL tokens) via a smart contract call.
+
+- **Cross-chain Agent (`agent/cross_chain_agent.py`):** Simulates autonomous cross-chain trading using NEAR Intents. It demonstrates multi-chain swaps (e.g., BTC, ETH, SOL, DOGE, TRUMP) in a single flow.
+
+- **Bitcoin Agent (`agent/bitcoin_agent.py`):** Uses simulated chain signatures to create and sign Bitcoin transactions, demonstrating integration with Bitcoin L1.
+
+- **Twitter/X Agent (`agent/twitter_agent.py`):** Simulates a Twitter bot interaction where users can trigger transactions (e.g., bet escrow flows) via Twitter mentions. The bot responds with a transaction link.
+
+- **VeaxFlow Agent (`agent/veaxflow_agent.py`):** Integrates with the VeaxFlow liquidity management API to fetch real-time liquidity data and suggest dynamic adjustments for high-volume liquidity providers.
+
+- **Questflow Agent (`agent/questflow_agent.py`):** Simulates integration with the Questflow developer platform, demonstrating strategic trading, airdrop, and data analysis capabilities.
+
+- **Absurd Agent (`agent/absurd_agent.py`):** Pushes the boundaries of creative AI experiments with absurd market simulations and unexpected outcomes.
+
+- **Nuffle Labs Agent (`agent/nuffle_agent.py`):** Demonstrates integration with Nuffle Labs' technology, simulating API interactions for advanced tech integrations.
+
+- **Frax Finance Agent (`agent/frax_agent.py`):** Simulates integration with Frax Finance via API calls, showcasing potential for innovative DeFi applications.
+
+### Running the Agents
+
+To run any of the agents, execute the corresponding Python script. For example:
+
+```bash
+python agent/aurora_agent.py
+```
+
+Make sure to set any necessary environment variables (e.g., `NEAR_ACCOUNT`, `CONTRACT_ID`, `HOT_CONTRACT`) for agents that interact with NEAR smart contracts. 
