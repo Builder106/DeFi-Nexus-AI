@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Bot, LineChart, DollarSign, TrendingUp, ArrowUpDown } from "lucide-react";
 import { DefiAgentData } from "@/lib/types";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from "../components/ui/skeleton";
+import AgentPerformanceChart from "./agent-performance-chart";
 
 export default function DeFiAgents() {
   const [agentData, setAgentData] = useState<DefiAgentData | null>(null);
@@ -60,6 +61,7 @@ export default function DeFiAgents() {
             </Card>
           ))}
         </div>
+        <Skeleton className="h-[400px] w-full" />
       </div>
     );
   }
@@ -211,17 +213,7 @@ export default function DeFiAgents() {
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Agent Performance History</CardTitle>
-          <CardDescription>Last updated: {new Date(agentData.lastUpdated).toLocaleString()}</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="h-[300px] flex items-center justify-center text-muted-foreground">
-            Performance Chart Coming Soon
-          </div>
-        </CardContent>
-      </Card>
+      <AgentPerformanceChart />
     </div>
   );
 } 
