@@ -9,7 +9,10 @@ import YieldOptimization from "@/components/yield-optimization"
 import CrossChainTrades from "@/components/cross-chain-trades"
 import AIPerformance from "@/components/ai-performance"
 import NearIntegration from "@/components/near-integration"
-import { useEffect } from "react"
+import DeFiAgents from "@/components/defi-agents"
+import { useEffect, useState } from "react"
+import { MarketData } from "@/lib/types"
+import { Skeleton } from "@/components/ui/skeleton"
 
 function MarketMakingStrategyWrapper() {
   useEffect(() => {
@@ -25,8 +28,83 @@ function YieldOptimizationWrapper() {
   return null;
 }
 
-// New component to encapsulate the overview content
+// Updated OverviewCards component
 function OverviewCards() {
+  const [marketData, setMarketData] = useState<MarketData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<Error | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+
+    async function fetchMarketData() {
+      setLoading(true);
+      try {
+        const response = await fetch('/api/market-data');
+        if (!response.ok) {
+          throw new Error('Failed to fetch market data');
+        }
+        const data = await response.json();
+        if (mounted) {
+          setMarketData(data);
+        }
+      } catch (err) {
+        if (mounted) {
+          setError(err instanceof Error ? err : new Error('An error occurred'));
+        }
+      } finally {
+        if (mounted) {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchMarketData();
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="space-y-6">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[...Array(4)].map((_, i) => (
+            <Card key={i}>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <Skeleton className="h-4 w-[150px]" />
+                <Skeleton className="h-4 w-4" />
+              </CardHeader>
+              <CardContent>
+                <Skeleton className="h-8 w-[100px] mb-2" />
+                <Skeleton className="h-4 w-[150px]" />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="text-center py-10">
+        <div className="text-red-500 mb-2">Error: {error.message}</div>
+        <button 
+          onClick={() => window.location.reload()} 
+          className="text-blue-500 underline"
+        >
+          Try Again
+        </button>
+      </div>
+    );
+  }
+
+  if (!marketData) {
+    return <div className="text-center py-10">No market data available</div>;
+  }
+
   return (
     <>
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -36,8 +114,8 @@ function OverviewCards() {
             <Zap className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$45,231.89</div>
-            <p className="text-xs text-muted-foreground">+20.1% from last month</p>
+            <div className="text-2xl font-bold">{marketData.totalValueLocked}</div>
+            <p className="text-xs text-muted-foreground">Updated at {new Date(marketData.lastUpdated).toLocaleTimeString()}</p>
           </CardContent>
         </Card>
         <Card>
@@ -46,8 +124,12 @@ function OverviewCards() {
             <Layers className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12</div>
-            <p className="text-xs text-muted-foreground">4 market-making, 8 yield farming</p>
+            <div className="text-2xl font-bold">
+              {marketData.activeStrategies.marketMaking + marketData.activeStrategies.yieldFarming}
+            </div>
+            <p className="text-xs text-muted-foreground">
+              {marketData.activeStrategies.marketMaking} market-making, {marketData.activeStrategies.yieldFarming} yield farming
+            </p>
           </CardContent>
         </Card>
         <Card>
@@ -56,8 +138,8 @@ function OverviewCards() {
             <BarChart3 className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">$789,352</div>
-            <p className="text-xs text-muted-foreground">Across 3 chains</p>
+            <div className="text-2xl font-bold">{marketData.tradingVolume24h}</div>
+            <p className="text-xs text-muted-foreground">Across all chains</p>
           </CardContent>
         </Card>
         <Card>
@@ -71,13 +153,15 @@ function OverviewCards() {
           </CardContent>
         </Card>
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7 mt-6">
         <Card className="col-span-4">
           <CardHeader>
             <CardTitle>Market Overview</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-[200px]">{/* Add market overview chart here */}</div>
+            <div className="h-[200px] flex items-center justify-center text-muted-foreground">
+              Market Overview Chart Placeholder
+            </div>
           </CardContent>
         </Card>
         <Card className="col-span-3">
@@ -86,7 +170,9 @@ function OverviewCards() {
             <CardDescription>Across all integrated chains</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-8">{/* Add recent transactions list here */}</div>
+            <div className="space-y-8 flex items-center justify-center text-muted-foreground">
+              Transactions List Placeholder
+            </div>
           </CardContent>
         </Card>
       </div>
@@ -115,6 +201,7 @@ export default function DashboardPage() {
             <TabsTrigger value="market-making">Market Making</TabsTrigger>
             <TabsTrigger value="yield">Yield Optimization</TabsTrigger>
             <TabsTrigger value="cross-chain">Cross-Chain Trades</TabsTrigger>
+            <TabsTrigger value="defi-agents">DeFi Agents</TabsTrigger>
           </TabsList>
           <TabsContent value="overview" className="space-y-4">
             <OverviewCards />
@@ -127,6 +214,9 @@ export default function DashboardPage() {
           </TabsContent>
           <TabsContent value="cross-chain" className="space-y-4">
             <CrossChainTrades />
+          </TabsContent>
+          <TabsContent value="defi-agents" className="space-y-4">
+            <DeFiAgents />
           </TabsContent>
         </Tabs>
       </main>
