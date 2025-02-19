@@ -119,7 +119,7 @@ function OverviewCards() {
           {updating && (
             <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-500/10 text-blue-400">
               <Sparkles className="w-3 h-3 mr-1 animate-pulse" />
-              Updating...
+              Updating...j
             </span>
           )}
         </div>
